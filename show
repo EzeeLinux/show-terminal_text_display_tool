@@ -1,0 +1,108 @@
+#!/bin/bash
+
+# Show -- Terminal Text Display Tool (Version 1.0)
+# (GNU/General Public License version 2.0
+# by Joe Collins www.ezeelinux.com (January, 2018)
+
+# Check for file or '--help' argument:
+
+if  [ -z "$1"  ]; then
+    echo "Show Error: You must give at least one file name."
+    echo "            Try 'show --help' to learn more."
+    exit 1
+fi
+
+# Functions.
+
+display() {
+
+# Takes text from file and displays it.
+
+# Clear the screen:
+
+clear
+
+# Hide the cursor:
+
+tput civis
+
+# Add three blank lines at top of file:
+
+echo;echo;echo
+
+# Get number of columns in terminal emulator window:
+
+cols="$(tput cols)"
+
+# Display text from file and justify to fit window:
+
+fold -w $cols -s "$FILE"
+
+# Get next file or exit display function on key press:
+
+read -n 1 -s
+
+}
+
+show-help() {
+
+less << _EOF_
+
+ Show -- Terminal Text Display Tool (Version 1.0)
+
+ Help Page -- Press 'q' to exit.
+
+ Show displays text files in a terminal and formats to the terminal emulator
+ display window but adds no other characters on the screen. Show is great for
+ screencasts and presentations.
+
+ Commands:
+
+    show file1.txt file2.txt file3.txt (...more files) = display the contents
+    of each file one at a time.
+
+    show --help = shows this help page.
+
+    You can give show as many files to work with as you like, just list one
+    after another in the order you'd like to display them. Pressing any key
+    will advance to the next file. The screen will be cleared but the user can
+    scroll up to see the contents of the last file displayed. Pressing any key
+    after the files have all been displayed will add a line to the bottom of
+    the screen letting you know that there are no more files. Press any key
+    once again to clear the screen and exit the program.
+
+    Note: You must give show at least one file name to work with or it exits
+    with an error.
+
+ By Joe Collins www.ezeelinux.com (GNU/General Public License version 2.0)
+
+_EOF_
+
+}
+
+# Execution.
+
+# Display help page:
+
+if [ "$1" == "--help" ]; then
+    show-help
+    exit
+fi
+
+# Start displaying file(s):
+
+for FILE in "$@"
+    do
+        display
+    done
+
+# Tell user there are no more files in the cue on key press:
+
+echo "-- No more files --"
+
+# Exit on key press:
+
+read -n 1 -s
+tput cnorm
+clear
+exit
