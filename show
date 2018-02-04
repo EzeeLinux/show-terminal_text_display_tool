@@ -7,8 +7,8 @@
 # Check for file or '--help' argument:
 
 if  [ -z "$1"  ]; then
-    echo "Show Error: You must give at least one file name."
-    echo "            Try 'show --help' to learn more."
+    echo "Show Error: You must give at least one file name." >&2
+    echo "            Try 'show --help' to learn more." >&2
     exit 1
 fi
 
