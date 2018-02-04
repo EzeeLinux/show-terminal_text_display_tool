@@ -38,6 +38,14 @@ cols="$(tput cols)"
 
 fold -w $cols -s "$FILE"
 
+# Check for error and exit if there is one:
+
+if [ "$?" != "0" ]; then
+    echo "Show Error: Something went wrong! Exiting." >&2
+    tput cnorm
+    exit 1
+fi
+
 # Get next file or exit display function on key press:
 
 read -n 1 -s
